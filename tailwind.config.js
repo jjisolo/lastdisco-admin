@@ -19,7 +19,10 @@ module.exports = {
           900: '#1F1D2B',
           800: '#252836',
         },
-        primary : '#EB966A',
+        primary : '#FFAAC9',
+        color1: '#E4A5FF',
+        color2: '#FFCDA8',
+        color3: '#FFE7CE',
         accent : {
           blue: '#65B0F6',
           orange: '#FFB572',

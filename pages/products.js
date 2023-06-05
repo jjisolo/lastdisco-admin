@@ -9,7 +9,7 @@ export default function Products() {
     useEffect(() => {
         axios.get('/api/products').then(response =>{
             setProducts(response.data);
-        })
+        });
     }, []);
 
     return (
