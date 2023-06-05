@@ -10,9 +10,12 @@ export default function Layout({ children }) {
       <div className="bg-fuchsia-200 w-screen h-screen flex items-center">
 
         <div className="text-center w-full">
-          <button onClick={() => signIn('vk') }className="bg-black p-2 px-4 rounded-lg">
-            Login with VK!
-          </button>
+          <h1>
+            You are not logged in!
+          </h1> 
+          <a href="http://localhost:3000/api/auth/signin">
+            Login here
+          </a>
         </div>
 
       </div>

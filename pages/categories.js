@@ -109,7 +109,7 @@ function Categories({swal}) {
                 </thead>
                 <tbody>
                     {categories.length > 0 && categories.map(category => (
-                        <tr>
+                        <tr key={category.name}>
                             <td>
                                 {category?.name}
                             </td>
