@@ -2,20 +2,25 @@ import { useEffect, useState } from 'react';
 import Layout from './components/Layout';
 import axios from 'axios';
 import { withSwal } from 'react-sweetalert2';
+import LoadingOverlay from 'react-loading-overlay';
 
 function Categories({swal}) {
     const [name,           setName]           = useState('');
     const [categories,     setCategories]     = useState([]);
     const [parentCategory, setParentCategory] = useState('');
     const [editedCategory, setEditedCategory] = useState(null);
+    const [loadingTable,   setLoadingTable]   = useState(false);
 
     useEffect(() => {
         fetchCategories();
     }, []);
 
     function fetchCategories() {
+        setLoadingTable(true);
         axios.get('/api/categories').then(result => {
             setCategories(result.data);
+        }).finally(() => {
+            setLoadingTable(false);
         });
     }
 
@@ -27,11 +32,11 @@ function Categories({swal}) {
 
     function deleteCategory(category) {
         swal.fire({
-            title:              'Are you sure?',
-            text:               `Do you really want to delete ${category.name}?`,
+            title:              'Вы уверены?',
+            text:               `Вы действительно хотите удалить ${category.name}?`,
             showCancelButton:   true,
-            cancelButtonTitle:  'Cancel',
-            confirmButtonText:  'Yes, delete it!',
+            cancelButtonText:  'Нет',
+            confirmButtonText:  'Да, хочу!',
             confirmButtonColor: "#d55",
         }).then (async result => {
             if(result.isConfirmed) {
@@ -60,80 +65,138 @@ function Categories({swal}) {
         fetchCategories();
     }
 
+    function resetForm() {
+        var swalText = editedCategory
+         ? `Вы дейстительно хотите сбросить форму для категории ${editedCategory.name}`
+         : `Вы дейстительно хотите сбросить форму?`;
+
+        swal.fire({
+            title:              'Вы уверены?',
+            text:               swalText,
+            showCancelButton:   true,
+            cancelButtonText:  'Нет',
+            confirmButtonText:  'Да, хочу!',
+            confirmButtonColor: "#d55",
+        }).then (result => {
+            setEditedCategory(null);
+            setParentCategory('');
+            setName('');
+        }).catch(error => {
+
+        });
+    }
+
     return (
-        <Layout>
-            <h1 className='image-back-div'>
-                <span className='image-back-div-text'>
-                    lastdisco://контроллер_категорий
-                </span>
-            </h1>
+        <LoadingOverlay active={loadingTable} spinner text="Загружаем данные из базы данных...">
+            <Layout>
+                <h1 className='image-back-div'>
+                    <span className='image-back-div-text'>
+                        lastdisco://контроллер_категорий
+                    </span>
+                </h1>
 
-            <label>
-                { editedCategory ? `Edit category  ${editedCategory.name}` : "Create new category"}
-            </label>
+                <label>
+                    { editedCategory ? `Редактировать категорию ${editedCategory.name}` : "Создать новую категорию"}
+                </label>
 
-            <form onSubmit={saveCategory} className='flex gap-1'>
-                <input type='text' placeholder={'Category name'} value={name} className='mb-0'
-                       onChange={ev => setName(ev.target.value)} />
-                
-                <select className='mb-0' onChange={ev => setParentCategory(ev.target.value)} value={parentCategory}>
-                    <option value="">
-                        No parent category
-                    </option>
+                <h2>
+                    Перед вами форма категорий, для того чтобы
+                    добавить категорию впишите ее название в
+                    поле ввода(таким образом вы создаете&nbsp;
+                    <span>ВЕДУЩУЮ</span> категорию),
+                    затем вы опционально можете выбрать ее&nbsp;
+                    <span>ВЕДОМУЮ</span> категорию. <br /><br />
                     
-                    {categories.length > 0 && categories.map(category => (
-                        <option value={category._id}>
-                            {category.name}
+                    <span>ВЕДОМАЯ</span> категория это любая
+                    категория с которой&nbsp;
+                    <span>может быть</span>(а может
+                    и нет) связана 
+                    ее ведомая подкатегория.<br />
+
+                    <span>ВЕДОМАЯ</span> категория это
+                    любая категория у которой есть родитель
+                    (уже существующая категория), например:&nbsp;
+                    <span>ведущая</span> - глина,&nbsp;
+                    <span>ведомая</span>&nbsp; - жабы
+                </h2>
+
+                <form onSubmit={saveCategory} className='flex gap-1' id='category-form'>
+                    <input type='text' placeholder={'Наример: картина, глина, брелки...'} value={name} className='mb-0'
+                        onChange={ev => setName(ev.target.value)} />
+                    
+                    <select className='mb-0' onChange={ev => setParentCategory(ev.target.value)} value={parentCategory}>
+                        <option value="">
+                            нет ведомой категории
                         </option>
-                    ))}
-                </select>
+                        
+                        {categories.length > 0 && categories.map(category => (
+                            <option value={category._id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
 
-                <button type='submit' className='btn-primary py-1'>
-                    Save
-                </button>
-            </form>
-            
-            <table className="basic mt-4">
-                <thead>
-                    <tr>
-                        <td>
-                            Category name
-                        </td>
+                    <button type='reset' className='btn-primary py-1 mt-4 bg-gray-700' onClick={resetForm}>
+                        сбросить
+                    </button>
 
-                        <td>
-                            Parent Category
-                        </td>
+                    <button type='submit' className='btn-primary py-1 mt-4 bg-green-800'>
+                        сохранить
+                    </button>
+                </form>
 
-                        <td>
-                            Action
-                        </td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {categories.length > 0 && categories.map(category => (
-                        <tr key={category.name}>
-                            <td>
+
+                <div>
+                    <div className='mt-20'>
+                        <label>
+                            Таблица категорий
+                        </label>
+                    </div>
+                
+                    <table className="basic mt-4">
+                        <thead>
+                            <tr>
+                                <td>
+                                    категория_ведущая
+                                </td>
+
+                                <td>
+                                    категория_ведомая
+                                </td>
+
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                        </thead>
+                    <tbody>
+                        {categories.length > 0 && categories.map(category => (
+                            <tr key={category.name}>
+                                <td>
                                 {category?.name}
-                            </td>
-
-                            <td>
-                                {category?.parent?.name}
-                            </td>
-
-                            <td>
-                                <button onClick={() => editCategory(category)} className='btn-primary mr-1'>
-                                    Edit
-                                </button>
-
-                                <button onClick={() => deleteCategory(category)} className='btn-primary'>
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </Layout>
+                                </td>
+    
+                                <td>
+                                    {category?.parent?.name}
+                                </td>
+    
+                                <td>
+                                    <button onClick={() => editCategory(category)} className='btn-primary mr-1'>
+                                        Редактировать
+                                    </button>
+    
+                                    <button onClick={() => deleteCategory(category)} className='btn-primary text-red-400'>
+                                        Удалить
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+</table>
+            
+            </div>
+            </Layout>
+        </LoadingOverlay>
     )
 }
 
