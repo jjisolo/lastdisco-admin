@@ -63,8 +63,9 @@ function Categories({swal}) {
     return (
         <Layout>
             <h1>
-                Categories
+                Категории изделий
             </h1>
+            <hr />
 
             <label>
                 { editedCategory ? `Edit category  ${editedCategory.name}` : "Create new category"}
