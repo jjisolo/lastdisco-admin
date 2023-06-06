@@ -26,6 +26,27 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.image-back-div {
+  @apply text-end bg-primary rounded-xl bg-opacity-60 items-end self-end;
+  object-fit: fill;
+  position: relative;
+  background-image: url("https://storage.yandexcloud.net/lastdisco/abstract-3840x2160-4k-5k-wallpaper-font-typography-pink-shape-3d-13118.jpg");
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-clip:padding-box;
+}
+
+.image-back-div span {
+  @apply mt-8 mb-10 min-h-screen rounded-xl p-2;
+  margin-right: 0.5%;
+  color: white;
+  font-size: x-large;
+  background: #1F1D2B;
+  text-shadow: #FFAAC9 1px 0 10px;
+}
+
 input, textarea, select {
   @apply border-2 border-gray-300 rounded-md px-1 w-full;
   @apply mb-2;
@@ -36,7 +57,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 h1 {
-  @apply text-blue-900 mt-0 mb-10 text-3xl font-semibold leading-loose text-center text-gray-700;
+  @apply mt-0 mb-10 text-3xl mt-0 font-semibold leading-loose text-center text-white;
 }
 
 label {

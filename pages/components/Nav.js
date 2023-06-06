@@ -10,16 +10,12 @@ import { MdOutlineCategory} from 'react-icons/md';
 import { LuSettings       } from 'react-icons/lu';
 import { RiAdminLine      } from 'react-icons/ri';
 import { IoMdExit         } from 'react-icons/io';
-import { useState } from "react";
 
 const ICON_SIZE            = 30;
 const ICON_SIZE_ADMIN      = 30;
 const PRIMARY_COLOR        = "#FFAAC9";
-const PRIMARY_COLOR_ACTIVE = "#E4A5FF"; 
 
-export default function Nav() {
-    const [hotElement, setHotElement] = useState('');
-    
+export default function Nav() {    
     const inactiveLink = "flex items-start self-start gap-2 p-2 my-2 mr-1 ml-1 rounded-xl text-primary font-semibold text-lg";
     const activeLink   = inactiveLink + " bg-opacity-30 rounded-xl bg-primary";
 
@@ -41,7 +37,6 @@ export default function Nav() {
         e.target.style.opacity    = 1;
     }
     
-
     return(
         <aside className="flex flex-col items-start self-start text-slate-950 bg-gray-900 gap-0 mt-2 mb-10">
             <Link href={'/'} className="flex p-2 mb-10 mr-1 ml-1 rounded-xl text-primary font-semibold text-lg"
@@ -75,7 +70,7 @@ export default function Nav() {
                     </Link>
                 ))}
 
-                <Link href={'/'}
+                <Link href={'#'}
                       className   ={inactiveLink}
                       onMouseEnter={linkHandleMouseEnter}
                       onMouseLeave={linkHandleMouseLeave}

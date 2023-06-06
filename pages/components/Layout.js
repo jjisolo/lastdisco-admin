@@ -7,7 +7,7 @@ export default function Layout({ children }) {
 
   if(!session) {
     return(
-      <div className="bg-fuchsia-200 w-screen h-screen flex items-center">
+      <div className="bg-gray-700 w-screen h-screen flex items-center">
 
         <div className="text-center w-full">
           <h1>
@@ -17,7 +17,6 @@ export default function Layout({ children }) {
             Login here
           </a>
         </div>
-
       </div>
     )
   }
@@ -26,7 +25,7 @@ export default function Layout({ children }) {
     <div className="bg-gray-900 min-h-screen flex">
       <Nav />
 
-      <div className="bg-white text-black flex-grow mt-2 mr-2 mb-2 rounded-lg p-4">
+      <div className="bg-gray-800 text-white flex-grow mt-2 mr-2 mb-0 rounded-lg p-4">
         {children}
       </div>
 

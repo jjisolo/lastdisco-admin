@@ -62,10 +62,11 @@ function Categories({swal}) {
 
     return (
         <Layout>
-            <h1>
-                Категории изделий
+            <h1 className='image-back-div'>
+                <span className='image-back-div-text'>
+                    lastdisco://контроллер_категорий
+                </span>
             </h1>
-            <hr />
 
             <label>
                 { editedCategory ? `Edit category  ${editedCategory.name}` : "Create new category"}
